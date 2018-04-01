@@ -12,7 +12,6 @@
  * @since         0.10.8
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
 /*
  * Configure paths required to find CakePHP + general filepath constants
  */
@@ -28,7 +27,6 @@ require __DIR__ . '/paths.php';
  * - Setting the default application paths.
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
-
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleErrorHandler;
 use Cake\Core\App;
@@ -214,3 +212,24 @@ Type::build('timestamp')
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
+
+Plugin::load('AdminLTE', ['bootstrap' => true, 'routes' => true]);
+
+// AdminLTE Config
+
+Configure::write('Theme', [
+    'title' => 'Dario Test',
+    'logo' => [
+        'mini' => 'SY',
+        'large' => 'Dario Test'
+    ],
+    'login' => [
+        'show_remember' => false,
+        'show_register' => false,
+        'show_social' => false
+    ],
+    'folder' => ROOT,
+    'skin' => 'blue'
+]);
+
+Plugin::load('API', ['bootstrap' => false, 'routes' => true]);

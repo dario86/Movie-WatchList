@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Controller\Component\AuthComponent;
 
 /**
  * Application Controller
@@ -28,27 +29,69 @@ use Cake\Event\Event;
 class AppController extends Controller
 {
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
     public function initialize()
     {
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
+        $this->loadComponent('Security');
         $this->loadComponent('Flash');
+        $this->loadComponent('Cookie');
+        $this->loadComponent('Csrf');
+       
+        $this->loadComponent('Auth', [
+            'loginAction' => [
+                'controller' => 'Pages',
+                'action' => 'home',
+                'plugin' => null
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Users',
+                'action' => 'login',
+                'plugin' => null
+            ],
+        ]);
+    }
 
-        /*
-         * Enable the following components for recommended CakePHP security settings.
-         * see https://book.cakephp.org/3.0/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
-        //$this->loadComponent('Csrf');
+    public function isAuthorized($user = null)
+    {
+        return true;
+    }
+
+    /**
+     * BeforeRender hook for Controllers
+     *
+     * Called right before the view rendering phase starts
+     *
+     * @see http://book.cakephp.org/3.0/en/controllers/components.html#beforeRender
+     * @param \Cake\Event\Event $event
+     * @return void
+     */
+    public function beforeFilter(Event $event)
+    {
+        $this->response->disableCache();
+
+        // Passo i dati dell'utente loggato
+        $this->set('authUser', $this->Auth->user());
+
+        // Imposto il tema di default
+        $this->viewBuilder()->theme('AdminLTE');
+        $this->viewBuilder()->layout('adminlte');
+
+        // Se la richiesta è in ajax modifico il layout di riferimento
+//        if ($this->request->is('ajax')) {
+//            $this->viewBuilder()->layout('ajax');
+//        }
+//
+//        // Disabilito i componeneti Security e Crsf se la richiesta è via API (json)
+//        if ($this->request->is('json')) {
+//            $this->components()->unload('Security');
+//            $this->components()->unload('Csrf');
+//        }
+    }
+
+    public function beforeRender(Event $event)
+    {
+        $this->viewBuilder()->setClassName('AdminLTE.AdminLTE');
     }
 }
