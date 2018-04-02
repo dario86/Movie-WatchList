@@ -24,14 +24,11 @@ $this->set('heading', [
 ]);
 echo $this->Html->css('plugins/jquery-ui-1.12.1/jquery-ui.min', ['block' => 'css']);
 
-$this->start('script');
-
-?>
+$this->start('script'); ?>
 <script>
     var api_key = '<?= Configure::read('themoviedb_api_key') ?>';
 </script>
-<?php
-$this->end();
+<?php $this->end();
 echo $this->Html->script('plugins/jquery-ui-1.12.1/jquery-ui.min', ['block' => 'script']);
 echo $this->Html->script('movies', ['block' => 'script']);
 
