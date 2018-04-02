@@ -37,13 +37,6 @@ class PagesController extends AppController
 
         $this->Auth->allow();
     }
-    
-    public function home()
-    {
-        if (empty($this->Auth->user())) {
-            return $this->redirect(['controller' => 'Pages', 'action' => 'signup']);
-        }
-    }
 
     /**
      * Iscrizione nuovo utente
