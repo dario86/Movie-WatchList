@@ -1,4 +1,6 @@
 <?php
+use Cake\Core\Configure;
+
 $this->set('heading', [
     'title' => __('Aggiungi film'),
     'description' => __('Aggiungi nuovo film'),
@@ -22,14 +24,19 @@ $this->set('heading', [
 ]);
 echo $this->Html->css('plugins/jquery-ui-1.12.1/jquery-ui.min', ['block' => 'css']);
 
+$this->start('script');
+
+?>
+<script>
+    var api_key = '<?= Configure::read('themoviedb_api_key') ?>';
+</script>
+<?php
+$this->end();
 echo $this->Html->script('plugins/jquery-ui-1.12.1/jquery-ui.min', ['block' => 'script']);
 echo $this->Html->script('movies', ['block' => 'script']);
+
 ?>
 
-<!--<div class="row">
-    <div class="col-xs-12">
-    </div>
-</div>-->
 <div class="box">
     <div class="box-header with-border">
         <div class="box-tools pull-right">
@@ -47,6 +54,7 @@ echo $this->Html->script('movies', ['block' => 'script']);
             'data-toggle' => 'validator',
             'role' => 'form',
         ]);
+
         ?>
 
         <div class="form-group">
@@ -61,6 +69,7 @@ echo $this->Html->script('movies', ['block' => 'script']);
                         'label' => __('Title'),
                         'required' => true,
                     ]);
+
                     ?>
                 </div>
                 <div class="col-xs-12 col-md-6">
@@ -69,10 +78,11 @@ echo $this->Html->script('movies', ['block' => 'script']);
                     echo $this->Form->select('watched', [
                         0 => 'No',
                         1 => 'Si'
-                            ], [
+                        ], [
                         'class' => 'form-control',
                         'required' => true,
                     ]);
+
                     ?>
                 </div>
 
@@ -87,6 +97,7 @@ echo $this->Html->script('movies', ['block' => 'script']);
                         'type' => 'submit'
                     ]);
                     echo $this->Form->end();
+
                     ?>
                 </div>
             </div>
