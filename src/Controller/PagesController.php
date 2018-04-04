@@ -15,10 +15,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Core\Configure;
-use Cake\Network\Exception\ForbiddenException;
-use Cake\Network\Exception\NotFoundException;
-use Cake\View\Exception\MissingTemplateException;
 use Cake\Event\Event;
 
 /**
@@ -31,10 +27,10 @@ use Cake\Event\Event;
 class PagesController extends AppController
 {
 
-     public function beforeFilter(Event $event)
+    public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-
+        $this->viewBuilder()->layout('adminlte-empty');
         $this->Auth->allow();
     }
 
@@ -45,11 +41,11 @@ class PagesController extends AppController
      */
     public function signup()
     {
-        $this->viewBuilder()->layout('adminlte-empty');
+       
     }
 
     public function login()
     {
-        $this->viewBuilder()->layout('adminlte-empty');
+       
     }
 }
