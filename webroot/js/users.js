@@ -13,8 +13,7 @@ $(document).on('ready', function () {
                     $('.flash-success').removeClass('hidden').show();
                     $('.flash-error').hide();
                     $('.flash-success .message').html(message);
-                    console.log($(this));
-                    console.log($(this).find("input[type=text]"));
+                    
                     form.find("input").val("");
                 } 
                 if (data.type == 'error') {
@@ -40,7 +39,8 @@ $(document).on('ready', function () {
             success: function (data)
             {
                 if (data.auth) {
-                    window.location= form.attr('identify') + '/' + data.token; 
+                    localStorage.setItem('user_token', data.token);
+                    window.location= form.attr('identify') + '/' + data.token;                     
                 } 
                 else {
                     var message = data.message.replace(/\n/g, "<br/>");
