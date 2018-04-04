@@ -96,8 +96,6 @@ use Cake\Core\Configure; ?>
         <?php echo $this->Html->script('AdminLTE./plugins/fastclick/fastclick'); ?>
         <!-- AdminLTE App -->
         <?php echo $this->Html->script('AdminLTE./js/app.min'); ?>
-        <!-- Custom Js Base -->
-        <?php echo $this->Html->script('base'); ?>
         <!-- AdminLTE for demo purposes -->
         <?php echo $this->fetch('script'); ?>
         <?php echo $this->fetch('scriptBottom'); ?>
