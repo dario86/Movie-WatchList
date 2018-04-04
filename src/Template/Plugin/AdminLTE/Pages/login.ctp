@@ -2,13 +2,11 @@
 use Cake\Routing\Router;
 
 echo $this->Html->script('plugins/bootstrap-validator/validator', ['block' => 'script']);
-echo $this->Html->script('base', ['block' => 'script']); ?>
-
-?>
+echo $this->Html->script('users', ['block' => 'script']); ?>
 
 <div class="login-box">
     <div class="login-logo">
-        <b>Talent</b>Flow</a>
+        <b>Movies</b>WatchList</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
