@@ -71,6 +71,9 @@ class AppController extends Controller
     {
         $this->response->disableCache();
 
+        // Passo i dati dell'utente loggato
+        $this->set('authUser', $this->Auth->user());
+
         // Setting up theme
         $this->viewBuilder()->theme('AdminLTE');
         $this->viewBuilder()->layout('adminlte');
