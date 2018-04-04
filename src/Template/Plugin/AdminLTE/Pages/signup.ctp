@@ -2,13 +2,13 @@
 use Cake\Routing\Router;
 
 echo $this->Html->script('plugins/bootstrap-validator/validator', ['block' => 'script']);
-echo $this->Html->script('base', ['block' => 'script']);
+echo $this->Html->script('users', ['block' => 'script']);
 
 ?>
 <body class="hold-transition register-page">
     <div class="register-box">
         <div class="register-logo">
-            <b>Soisy</b>Test
+            <b>Movies</b>WatchList</a>
         </div>
 
         <div class="register-box-body">
