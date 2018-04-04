@@ -30,9 +30,14 @@ $this->start('script'); ?>
 </script>
 <?php $this->end();
 echo $this->Html->script('plugins/jquery-ui-1.12.1/jquery-ui.min', ['block' => 'script']);
-echo $this->Html->script('movies', ['block' => 'script']);
+echo $this->Html->script('movies', ['block' => 'script']); ?>
 
-?>
+<div class="flash-success hidden">
+    <?= $this->element('Flash/success', ['message' => '']); ?>
+</div>
+<div class="flash-error hidden">
+    <?= $this->element('Flash/error', ['message' => '']); ?>
+</div>
 
 <div class="box">
     <div class="box-header with-border">
