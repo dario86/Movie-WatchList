@@ -218,10 +218,10 @@ Plugin::load('AdminLTE', ['bootstrap' => true, 'routes' => true]);
 // AdminLTE Config
 
 Configure::write('Theme', [
-    'title' => 'Dario Test',
+    'title' => 'Movies WatchList',
     'logo' => [
-        'mini' => 'SY',
-        'large' => 'Dario Test'
+        'mini' => 'MWL',
+        'large' => 'Movies WatchList'
     ],
     'login' => [
         'show_remember' => false,
