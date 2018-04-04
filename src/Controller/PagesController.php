@@ -35,15 +35,16 @@ class PagesController extends AppController
     }
 
     /**
-     * Iscrizione nuovo utente
-     *
-     * @return type
+     * signup method
      */
     public function signup()
     {
        
     }
 
+    /**
+     * login method
+     */
     public function login()
     {
        
