@@ -41,12 +41,12 @@ class AppController extends Controller
        
         $this->loadComponent('Auth', [
             'loginAction' => [
-                'controller' => 'Pages',
+                'controller' => 'Movies',
                 'action' => 'home',
                 'plugin' => null
             ],
             'logoutRedirect' => [
-                'controller' => 'Users',
+                'controller' => 'Pages',
                 'action' => 'login',
                 'plugin' => null
             ],
@@ -71,23 +71,9 @@ class AppController extends Controller
     {
         $this->response->disableCache();
 
-        // Passo i dati dell'utente loggato
-        $this->set('authUser', $this->Auth->user());
-
-        // Imposto il tema di default
+        // Setting up theme
         $this->viewBuilder()->theme('AdminLTE');
         $this->viewBuilder()->layout('adminlte');
-
-        // Se la richiesta è in ajax modifico il layout di riferimento
-//        if ($this->request->is('ajax')) {
-//            $this->viewBuilder()->layout('ajax');
-//        }
-//
-//        // Disabilito i componeneti Security e Crsf se la richiesta è via API (json)
-//        if ($this->request->is('json')) {
-//            $this->components()->unload('Security');
-//            $this->components()->unload('Csrf');
-//        }
     }
 
     public function beforeRender(Event $event)
