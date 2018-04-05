@@ -47,7 +47,7 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
 
         if ($this->request->is(['post', 'put'])) {
-
+            
             // Patch entity with form data, signup validation
             $patchedUser = $this->Users->patchEntity($user, $this->request->data(), [
                 'validate' => 'signup'
@@ -92,7 +92,7 @@ class UsersController extends AppController
                     'Users.username' => $this->request->getData('username'),
                 ])
                 ->first();
-
+            
             if ($user && (new DefaultPasswordHasher)->check($this->request->getData('password'), $user->password)) {
                 // Found user. Create new token
                 $token = Text::uuid();

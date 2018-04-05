@@ -101,7 +101,7 @@ class MoviesTable extends Table
                 return $q->where(['Users.token' => $options['user_token']]);
             });
         }
-       
+
         if (!empty($options['data']['watched'])) {
             $query->innerJoin(
                 [
@@ -133,5 +133,77 @@ class MoviesTable extends Table
                         return $row;
                     });
             });
+    }
+
+    public function store($movie, $user, $watched)
+    {
+        $mu = $this->find()
+            ->where(['MoviesUsers.movie_id' => $movie->id,
+                'MoviesUsers.user_id' => $user->id,
+            ])
+            ->first();
+
+        if ($mu) {
+            return [
+                'type' => 'error',
+                'message' => __('Film già presente nella tua lista')
+            ];
+        } else {
+            $data['user_id'] = $user->id;
+            $data['movie_id'] = $movie->id;
+            $data['watched'] = $this->request->getData('watched');
+
+            $movie = $this->MoviesUsers->patchEntity($movie, $data);
+
+            $saved = $this->MoviesUsers->save($movie);
+
+            if ($saved) {
+                return [
+                    'type' => 'success',
+                    'message' => __('Film salvato')
+                ];
+            } else {
+                return [
+                    'type' => 'error',
+                    'message' => __('Si è verificato un errore nel salvataggio')
+                ];
+            }
+        }
+    }
+
+    /**
+     *
+     * @param type $externalId
+     * @param type $user
+     * @param type $watched
+     */
+    public function customSave($title, $externalId, $userId, $watched)
+    {
+        $movie = $this->newEntity([
+            'title' => $title,
+            'external_id' => $externalId,
+            'movies_users' => [
+                0 => [
+                    'id' => $userId,
+                    '_joinData' => [
+                        'watched' => $watched
+                    ]
+                ]
+            ]
+        ]);
+
+        $saved = $this->save($movie);
+
+        if ($saved) {
+            return [
+                'type' => 'success',
+                'message' => __('Film salvato')
+            ];
+        } else {
+            return [
+                'type' => 'error',
+                'message' => __('Si è verificato un errore nel salvataggio')
+            ];
+        }
     }
 }

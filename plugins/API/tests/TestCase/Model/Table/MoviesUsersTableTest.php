@@ -24,11 +24,11 @@ class MoviesUsersTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.a_p_i.movies_users',
-        'plugin.a_p_i.users',
-        'plugin.a_p_i.roles',
-        'plugin.a_p_i.movies',
-        'plugin.a_p_i.externals'
+        'plugin.API.movies_users',
+        'plugin.API.users',
+        'plugin.API.roles',
+        'plugin.API.movies',
+
     ];
 
     /**
