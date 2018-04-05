@@ -354,4 +354,6 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+
+    'themoviedb_api_key' => ''
 ];
