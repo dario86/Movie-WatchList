@@ -1,5 +1,4 @@
-<?php
-namespace API\Model\Table;
+<?php namespace API\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -54,12 +53,20 @@ class UsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-         $this->belongsTo('Roles', [
+        $this->belongsTo('Roles', [
             'foreignKey' => 'role_id',
             'joinType' => 'INNER',
             'className' => 'API.Roles'
         ]);
 
+        $this->belongsToMany('Movies', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'Movie_id',
+            'joinTable' => 'movies_users',
+            'className' => 'API.Movies',
+            'propertyName' => 'movies_users',
+            'through' => 'API.MoviesUsers',
+        ]);
     }
 
     /**
@@ -120,7 +127,7 @@ class UsersTable extends Table
             ->requirePresence('username', 'create')
             ->add('username', [
                 'usernameFormat' => [
-                    'rule'    => 'email',
+                    'rule' => 'email',
                     'message' => __('Email non valida')
                 ],
                 'unique' => [
@@ -132,33 +139,28 @@ class UsersTable extends Table
             ->maxLength('username', 127)
             ->scalar('username')
             ->maxLength('username', 127)
-
             ->notEmpty('password', 'Campo obbligatorio')
             ->add('password', 'passwordLength', [
-                'rule'    => ['minLength', 4],
+                'rule' => ['minLength', 4],
                 'message' => __('Password non valida (minimo 4 caratteri)'),
             ])
             ->scalar('password')
             ->maxLength('password', 127)
-
             ->notEmpty('password_repeat', 'Campo obbligatorio')
             ->add('password_repeat', 'passwordRepeat', [
-                'rule'    => ['compareWith', 'password'],
+                'rule' => ['compareWith', 'password'],
                 'message' => __('La password di verifica non coincide'),
             ])
             ->scalar('password_repeat')
             ->maxLength('password_repeat', 127)
-
             ->add('code', 'validCode', [
-                'rule'    => 'uuid',
+                'rule' => 'uuid',
                 'message' => __('code non valido'),
             ])
-
             ->requirePresence('name', 'create')
             ->notEmpty('name', 'create')
             ->scalar('name')
             ->maxLength('name', 127)
-
             ->requirePresence('surname', 'create')
             ->notEmpty('surname', 'create')
             ->scalar('surname')
@@ -168,12 +170,13 @@ class UsersTable extends Table
     }
 
     /**
-	 * @param \Cake\Event\Event $event
-	 * @param \Cake\Datasource\EntityInterface $entity
-	 * @param \ArrayObject $options
-	 * @return void
-	 */
-	public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options) {
+     * @param \Cake\Event\Event $event
+     * @param \Cake\Datasource\EntityInterface $entity
+     * @param \ArrayObject $options
+     * @return void
+     */
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
         // Inserisco IP se è nuovo utente
         if ($entity->isNew()) {
             $entity->ip = env('REMOTE_ADDR');

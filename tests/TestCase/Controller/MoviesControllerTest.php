@@ -16,7 +16,7 @@ class MoviesControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.movies'
+        'plugin.API.movies'
     ];
 
     /**

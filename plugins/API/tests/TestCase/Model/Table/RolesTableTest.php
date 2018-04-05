@@ -24,8 +24,8 @@ class RolesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.a_p_i.roles',
-        'plugin.a_p_i.users'
+        'plugin.API.roles',
+        'plugin.API.users'
     ];
 
     /**

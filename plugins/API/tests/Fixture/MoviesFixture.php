@@ -38,8 +38,13 @@ class MoviesFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'external_id' => 1,
-            'title' => 'Lorem ipsum dolor sit amet'
+            'external_id' => 49521,
+            'title' => 'L\'uomo d\'acciaio'
+        ],
+        [
+            'id' => 2,
+            'external_id' => 238330,
+            'title' => 'Franco, Ciccio e il Pirata Barbanera'
         ],
     ];
 }

@@ -28,6 +28,7 @@ class MoviesController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
+        $this->Auth->allow();
         $this->Security->config('unlockedActions', ['add', 'delete', 'setWatched']);
     }
 
@@ -66,51 +67,27 @@ class MoviesController extends AppController
 
                 // Movie exists in local database
                 if ($movie) {
-                    $data['movies_users'][0]['id'] = $user->id;
-                    //$data['users'][0]['._joinData']['movie_id'] = $result['id'];
-                    $data['movies_users'][0]['_joinData']['watched'] = $this->request->getData('watched');
-
-                    $movie = $this->Movies->patchEntity($movie, $data);
+                    $output = $this->MoviesUsers->customSave($movie->id, $user->id, $this->request->getData('watched'));
                 }
+
 
                 // New Movie
                 else {
-                    $movie = $this->Movies->newEntity([
-                        'title' => $this->request->getData('title'),
-                        'external_id' => $result['id'],
-                        'movies_users' => [
-                            0 => [
-                                'id' => $user->id,
-                                '_joinData' => [
-                                    'watched' => $this->request->getData('watched')
-                                ]
-                            ]
-                        ]
-                    ]);
-                }
-                $saved = $this->Movies->save($movie);
-
-                if ($saved) {
-                    $type = 'success';
-                    $message = __('Film salvato');
-                } else {
-                    $type = 'error';
-                    $message = __('Si è verificato un errore nel salvataggio');
+                    $output = $this->Movies->customSave($this->request->getData('title'), $result['id'], $user->id, $this->request->getData('watched'));
                 }
             }
 
             // No Movie found in external API
             else {
-                $type = 'error';
-                $message = __('Nessun film trovato');
+                $output = [
+                    'type' => 'error',
+                    'message' => __('Nessun film trovato'),
+                ];
             }
 
             return $this->response->withType('json')
                     ->withType('application/json')
-                    ->withStringBody(json_encode([
-                        'message' => $message,
-                        'type' => $type,
-            ]));
+                    ->withStringBody(json_encode($output));
         }
         throw new NotFoundException;
     }
@@ -156,12 +133,15 @@ class MoviesController extends AppController
                     'MoviesUsers.id' => $this->request->getData('id'),
                     'MoviesUsers.user_id' => $user->id])
                 ->first();
+            
+            if ($mu) {
+                $delete = $this->MoviesUsers->delete($mu);
 
-            $delete = $this->MoviesUsers->delete($mu);
-            $this->response->body($delete);
-            return $this->response;
+                $this->response->body($delete);
+                return $this->response;
+            }
         }
-
+        
         $this->response->body(-1);
         return $this->response;
     }

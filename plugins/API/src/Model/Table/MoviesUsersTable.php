@@ -46,7 +46,6 @@ class MoviesUsersTable extends Table
         ]);
 
         $this->addBehavior('Timestamp');
-
     }
 
     /**
@@ -81,7 +80,43 @@ class MoviesUsersTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['movie_id'], 'Movies'));
         $rules->add($rules->isUnique(['user_id', 'movie_id']));
-        
+
         return $rules;
+    }
+
+    public function customSave($movieId, $userId, $watched)
+    {
+        $mu = $this->find()
+            ->where(['MoviesUsers.movie_id' => $movieId,
+                'MoviesUsers.user_id' => $userId,
+            ])
+            ->first();
+
+        if ($mu) {
+            return [
+                'type' => 'error',
+                'message' => __('Film già presente nella tua lista')
+            ];
+        } else {
+            $data['user_id'] = $userId;
+            $data['movie_id'] = $movieId;
+            $data['watched'] = $watched;
+
+            $mu = $this->newEntity($data);
+            
+            $saved = $this->save($mu);
+
+            if ($saved) {
+                return [
+                    'type' => 'success',
+                    'message' => __('Film salvato')
+                ];
+            } else {
+                return [
+                    'type' => 'error',
+                    'message' => __('Si è verificato un errore nel salvataggio')
+                ];
+            }
+        }
     }
 }
