@@ -186,6 +186,53 @@ class MoviesControllerTest extends IntegrationTestCase
         $this->assertEquals($oldMoviesUsersCount, $this->MoviesUsers->find()->count());
     }
 
+    public function testAddNotFound()
+    {
+        // Simulating Ajax request
+       $_ENV['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+       $token = 'NOT_FOUND';
+
+        $this->configRequest([
+            'headers' => ['Authorization' => $token]
+        ]);
+
+        // New Movie
+        $data = [
+            'title' => "Avengers",
+            'watched' => '0',
+        ];
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/API/movies/add', $data);
+
+        $this->assertResponseError();
+    }
+    
+    public function testAddNoAjax()
+    {
+        $_ENV['HTTP_X_REQUESTED_WITH'] = null;
+        $token = '1234-5678';
+
+        $this->configRequest([
+            'headers' => ['Authorization' => $token]
+        ]);
+
+        // New Movie
+        $data = [
+            'title' => "Avengers",
+            'watched' => '0',
+        ];
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/API/movies/add', $data);
+
+        $this->assertResponseError();
+    }
+
+
+
     public function testSearchOk()
     {
         $token = '1234-5678';
@@ -274,6 +321,21 @@ class MoviesControllerTest extends IntegrationTestCase
         $this->assertEquals($oldMoviesUsersCount, $this->MoviesUsers->find()->count());
     }
 
+    public function testDeleteNotWrongAuth()
+    {
+        $token = 'WRONG';
+
+        $this->configRequest([
+            'headers' => ['Authorization' => $token]
+        ]);
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/API/movies/delete', ['id' => 999]);
+
+        $this->assertResponseError();
+    }
+
     public function testSetWatchedOk()
     {
         $token = '1234-5678';
@@ -328,6 +390,22 @@ class MoviesControllerTest extends IntegrationTestCase
         $this->assertEmpty($mu);
     }
 
+    public function testSetWatchedWrongAuth()
+    {
+        $token = 'WRONG';
+
+        $this->configRequest([
+            'headers' => ['Authorization' => $token]
+        ]);
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/API/movies/setWatched', ['id' => 2, 'watched' => true]);
+
+
+        $this->assertResponseError();
+    }
+
     public function testSetWatchedWrongUser()
     {
         $token = '1234-5678';
@@ -348,7 +426,6 @@ class MoviesControllerTest extends IntegrationTestCase
         $mu = $this->MoviesUsers->find()
             ->where(['MoviesUsers.id' => 2])
             ->first();
-
 
         $this->assertResponseOk();
         $this->assertEquals(-1, $this->_getBodyAsString());
