@@ -141,10 +141,28 @@ class UsersControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->post('/API/users/add', $data);
 
-        // last user
-        $user = $this->Users->find()
-            ->orderDesc('id')
-            ->first();
+        $this->assertResponseOk();
+        $this->assertEquals('error', json_decode($this->_getBodyAsString())->type);
+        $this->assertEquals($countOld, $this->Users->find()->count());
+    }
+
+    public function testAddGetRequest()
+    {
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->get('/API/users/add');
+
+        $this->assertResponseError();
+    }
+
+    public function testAddNoData()
+    {
+        $countOld = $this->Users->find()->count();
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/API/users/add', []);
+
         $this->assertResponseOk();
         $this->assertEquals('error', json_decode($this->_getBodyAsString())->type);
         $this->assertEquals($countOld, $this->Users->find()->count());
