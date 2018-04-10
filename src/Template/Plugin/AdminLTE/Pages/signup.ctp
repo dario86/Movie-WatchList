@@ -78,7 +78,6 @@ echo $this->Html->script('users', ['block' => 'script']);
                     'class' => 'form-control',
                     'placeholder' => 'Password',
                     'value' => '',
-                    'required' => false,
                     'label' => false,
                     'required' => true,
                 ]);
